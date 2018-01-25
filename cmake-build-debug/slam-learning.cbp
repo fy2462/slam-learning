@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="slam-learning"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\usr\;CMake Files\..\..\..\..\usr\local\;CMake Files\..\..\..\..\usr\local\share\;CMake Files\..\..\..\..\usr\local\share\OpenCV\;CMake Files\..\slambook\;CMake Files\..\slambook\3rdparty\;CMake Files\..\slambook\3rdparty\Sophus\;CMake Files\..\slambook\3rdparty\Sophus\build\;CMake Files\cmake_modules\;CMake Files\src\;CMake Files\test\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/Users/fengyan04/Github/slam-learning/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/fengyan04/Github/slam-learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/fengyan04/Github/slam-learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/fengyan04/Github/slam-learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/fengyan04/Github/slam-learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/Users/fengyan04/Github/slam-learning/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/fengyan04/Github/slam-learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/fengyan04/Github/slam-learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/fengyan04/Github/slam-learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/fengyan04/Github/slam-learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/Users/fengyan04/Github/slam-learning/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/fengyan04/Github/slam-learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/fengyan04/Github/slam-learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/fengyan04/Github/slam-learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/fengyan04/Github/slam-learning/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="slam">
+				<Option output="/Users/fengyan04/Github/slam-learning/lib/libslam.dylib" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/fengyan04/Github/slam-learning/cmake-build-debug/src"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/eigen3"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/local/include/opencv"/>
+					<Add directory="/Users/fengyan04/Github/slambook/3rdparty/Sophus"/>
+					<Add directory="/usr/local/include/eigen3"/>
+					<Add directory="/Users/fengyan04/Github/slam-learning/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/9.0.0/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/fengyan04/Github/slam-learning/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 slam"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/fengyan04/Github/slam-learning/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/fengyan04/Github/slam-learning/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/fengyan04/Github/slam-learning/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="slam/fast">
+				<Option output="/Users/fengyan04/Github/slam-learning/lib/libslam.dylib" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/fengyan04/Github/slam-learning/cmake-build-debug/src"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/eigen3"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/local/include/opencv"/>
+					<Add directory="/Users/fengyan04/Github/slambook/3rdparty/Sophus"/>
+					<Add directory="/usr/local/include/eigen3"/>
+					<Add directory="/Users/fengyan04/Github/slam-learning/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/9.0.0/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/fengyan04/Github/slam-learning/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 slam/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/fengyan04/Github/slam-learning/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/fengyan04/Github/slam-learning/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/fengyan04/Github/slam-learning/cmake-build-debug/src/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="run_vo">
+				<Option output="/Users/fengyan04/Github/slam-learning/bin/run_vo" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/fengyan04/Github/slam-learning/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/eigen3"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/local/include/opencv"/>
+					<Add directory="/Users/fengyan04/Github/slambook/3rdparty/Sophus"/>
+					<Add directory="/usr/local/include/eigen3"/>
+					<Add directory="/Users/fengyan04/Github/slam-learning/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/9.0.0/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/fengyan04/Github/slam-learning/cmake-build-debug/test/Makefile&quot;  VERBOSE=1 run_vo"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/fengyan04/Github/slam-learning/cmake-build-debug/test/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/fengyan04/Github/slam-learning/cmake-build-debug/test/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/fengyan04/Github/slam-learning/cmake-build-debug/test/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="run_vo/fast">
+				<Option output="/Users/fengyan04/Github/slam-learning/bin/run_vo" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/fengyan04/Github/slam-learning/bin"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/eigen3"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/local/include/opencv"/>
+					<Add directory="/Users/fengyan04/Github/slambook/3rdparty/Sophus"/>
+					<Add directory="/usr/local/include/eigen3"/>
+					<Add directory="/Users/fengyan04/Github/slam-learning/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include/c++/v1"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/lib/clang/9.0.0/include"/>
+					<Add directory="/Library/Developer/CommandLineTools/usr/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/fengyan04/Github/slam-learning/cmake-build-debug/test/Makefile&quot;  VERBOSE=1 run_vo/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/fengyan04/Github/slam-learning/cmake-build-debug/test/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/fengyan04/Github/slam-learning/cmake-build-debug/test/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/fengyan04/Github/slam-learning/cmake-build-debug/test/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/Users/fengyan04/Github/slam-learning/src/camera.cpp">
+			<Option target="slam"/>
+		</Unit>
+		<Unit filename="/Users/fengyan04/Github/slam-learning/src/config.cpp">
+			<Option target="slam"/>
+		</Unit>
+		<Unit filename="/Users/fengyan04/Github/slam-learning/src/frame.cpp">
+			<Option target="slam"/>
+		</Unit>
+		<Unit filename="/Users/fengyan04/Github/slam-learning/src/map.cpp">
+			<Option target="slam"/>
+		</Unit>
+		<Unit filename="/Users/fengyan04/Github/slam-learning/src/mappoint.cpp">
+			<Option target="slam"/>
+		</Unit>
+		<Unit filename="/Users/fengyan04/Github/slam-learning/src/visual_odometry.cpp">
+			<Option target="slam"/>
+		</Unit>
+		<Unit filename="/Users/fengyan04/Github/slam-learning/test/run_vo.cpp">
+			<Option target="run_vo"/>
+		</Unit>
+		<Unit filename="/Users/fengyan04/Github/slam-learning/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/Users/fengyan04/Github/slam-learning/../../../../usr/local/share/OpenCV/OpenCVConfig-version.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\share\OpenCV\"/>
+		</Unit>
+		<Unit filename="/Users/fengyan04/Github/slam-learning/../../../../usr/local/share/OpenCV/OpenCVConfig.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\share\OpenCV\"/>
+		</Unit>
+		<Unit filename="/Users/fengyan04/Github/slam-learning/../../../../usr/local/share/OpenCV/OpenCVModules.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\share\OpenCV\"/>
+		</Unit>
+		<Unit filename="/Users/fengyan04/Github/slam-learning/../../../../usr/local/share/OpenCV/OpenCVModules-release.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\usr\local\share\OpenCV\"/>
+		</Unit>
+		<Unit filename="/Users/fengyan04/Github/slam-learning/../slambook/3rdparty/Sophus/build/SophusConfig.cmake">
+			<Option virtualFolder="CMake Files\..\slambook\3rdparty\Sophus\build\"/>
+		</Unit>
+		<Unit filename="/Users/fengyan04/Github/slam-learning/cmake_modules/FindG2O.cmake">
+			<Option virtualFolder="CMake Files\cmake_modules\"/>
+		</Unit>
+		<Unit filename="/Users/fengyan04/Github/slam-learning/src/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\"/>
+		</Unit>
+		<Unit filename="/Users/fengyan04/Github/slam-learning/test/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\test\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
