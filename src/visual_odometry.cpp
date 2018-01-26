@@ -12,6 +12,7 @@
 
 #include "config.h"
 #include "visual_obometry.h"
+#include "g2o/g2o_types.h"
 
 namespace slam {
 

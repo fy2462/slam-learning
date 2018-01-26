@@ -29,7 +29,6 @@ int main(int argc, char **argv) {
         cout << "please generate the associate file called associate.txt!" << endl;
         return 1;
     }
-    cout << "teset1" << endl;
 
     vector<string> rgb_files, depth_files;
     vector<double> rgb_times, depth_times;
@@ -45,23 +44,14 @@ int main(int argc, char **argv) {
             break;
     }
 
-    cout << "teset2" << endl;
-
     slam::Camera::Ptr camera(new slam::Camera);
-
-    cout << "teset3" << endl;
 
     // visualization
     cv::viz::Viz3d vis("Visual Odometry");
-    cout << "teset4" << endl;
     cv::viz::WCoordinateSystem world_coor(1.0), camera_coor(0.5);
-    cout << "teset5" << endl;
     cv::Point3d cam_pos(0, -1.0, -1.0), cam_focal_point(0, 0, 0), cam_y_dir(0, 1, 0);
-    cout << "teset6" << endl;
     cv::Affine3d cam_pose = cv::viz::makeCameraPose(cam_pos, cam_focal_point, cam_y_dir);
-    cout << "teset7" << endl;
     vis.setViewerPose(cam_pose);
-    cout << "teset8" << endl;
 
     world_coor.setRenderingProperty(cv::viz::LINE_WIDTH, 2.0);
     camera_coor.setRenderingProperty(cv::viz::LINE_WIDTH, 1.0);
