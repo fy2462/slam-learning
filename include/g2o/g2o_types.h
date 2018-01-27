@@ -46,7 +46,7 @@ namespace slam {
 
         virtual bool write(std::ostream &out) const {}
 
-        Vector3d point_;
+        Vector3d _point;
     };
 
     class EdgeProjectXYZ2UVPoseOnly : public g2o::BaseUnaryEdge<2, Eigen::Vector2d, g2o::VertexSE3Expmap> {
@@ -61,8 +61,8 @@ namespace slam {
 
         virtual bool write(std::ostream &os) const {};
 
-        Vector3d point_;
-        Camera *camera_;
+        Vector3d _point;
+        Camera* _camera;
     };
 
 }

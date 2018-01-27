@@ -28,6 +28,7 @@ namespace slam {
         Mat _descriptors_curr;
         Mat _descriptors_ref;
         vector<cv::DMatch> _feature_matches;
+        cv::FlannBasedMatcher _matcher_flann; // flann matcher
 
         SE3 _T_c_r_estimated;
         int _num_inliers;
