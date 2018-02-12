@@ -3,10 +3,16 @@
 //
 
 #include "camera.h"
+#include "config.h"
 
 namespace slam {
 
     Camera::Camera() {
+        _fx = Config::get<float>("camera.fx");
+        _fy = Config::get<float>("camera.fy");
+        _cx = Config::get<float>("camera.cx");
+        _cy = Config::get<float>("camera.cy");
+        _depth_scale = Config::get<float>("camera.depth_scale");
     }
 
     Vector3d Camera::world2camera(const Vector3d &p_w, const SE3 &T_c_w) {

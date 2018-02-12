@@ -8,6 +8,7 @@
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/viz.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 #include "config.h"
 #include "visual_obometry.h"
@@ -89,6 +90,14 @@ int main(int argc, char **argv) {
                         Tcw.translation()(0, 0), Tcw.translation()(1, 0), Tcw.translation()(2, 0)
                 )
         );
+
+        Mat img_show = color.clone();
+        for ( auto& pt:vo->_map->_map_points )
+        {
+            slam::MapPoint::Ptr p = pt.second;
+            Vector2d pixel = pFrame->_camera->world2pixel ( p->_pos, pFrame->T_c_w );
+            cv::circle ( img_show, cv::Point2f ( pixel ( 0,0 ),pixel ( 1,0 ) ), 5, cv::Scalar ( 0,255,0 ), 2 );
+        }
 
         cv::imshow("image", color);
         cv::waitKey(1);

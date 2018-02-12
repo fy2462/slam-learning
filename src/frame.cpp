@@ -5,13 +5,15 @@
 #include "frame.h"
 
 namespace slam {
-    Frame::Frame() : _id(-1), _time_stamp(-1), _camera(nullptr) {}
+    Frame::Frame() : _id(-1), _time_stamp(-1), _camera(nullptr), _is_key_frame(false) {}
 
-    Frame::Frame(long id, double time_stamp, SE3 T_c_w, Camera::Ptr camera, Mat color, Mat depth) : _id(id),
-                                                                                                    _time_stamp(time_stamp),
-                                                                                                    _camera(camera),
-                                                                                                    _color_img(color),
-                                                                                                    _depth_img(depth) {}
+    Frame::Frame(long id, double time_stamp, SE3 T_c_w, Camera::Ptr camera, Mat color, Mat depth) :
+            _id(id),
+            _time_stamp(time_stamp),
+            _camera(camera),
+            _color_img(color),
+            _depth_img(depth),
+            _is_key_frame(false) {}
 
     Frame::~Frame() {}
 
@@ -49,6 +51,8 @@ namespace slam {
             return false;
         }
         Vector2d pixel = _camera->world2pixel(pt_world, T_c_w);
+        int u = pixel(0, 0);
+        int v = pixel(1, 0);
         return pixel(0, 0) > 0 && pixel(1, 0) > 0 && pixel(0, 0) < _color_img.cols && pixel(1, 0) < _color_img.rows;
     }
 }

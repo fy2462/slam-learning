@@ -20,6 +20,7 @@ namespace slam {
         SE3 T_c_w;
         Camera::Ptr _camera;
         Mat _color_img, _depth_img;
+        bool _is_key_frame;
 
     public:
         Frame();
