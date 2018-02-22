@@ -66,7 +66,11 @@ namespace slam {
 
         void poseEstimationPnP();
 
+        void poseEstimationICP();
+
         void setRef3DPoints();
+
+        MapPoint::Ptr keyPoint2MapPoint(cv::KeyPoint& key_point, int index);
 
         void addKeyFrame();
 

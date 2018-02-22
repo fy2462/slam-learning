@@ -27,9 +27,9 @@ namespace slam {
 
         virtual void linearizeOplus();
 
-        virtual bool read(std::istream &in) {}
+        virtual bool read(std::istream &in) { return false; }
 
-        virtual bool write(std::ostream &out) const {}
+        virtual bool write(std::ostream &out) const { return false; }
 
     };
 
@@ -38,13 +38,15 @@ namespace slam {
     public:
         EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
+        EdgeProjectXYZRGBDPoseOnly(const Eigen::Vector3d &point) : _point(point) {}
+
         virtual void computeError();
 
         virtual void linearizeOplus();
 
-        virtual bool read(std::istream &in) {}
+        virtual bool read(std::istream &in) { return false; }
 
-        virtual bool write(std::ostream &out) const {}
+        virtual bool write(std::ostream &out) const { return false; }
 
         Vector3d _point;
     };
@@ -57,9 +59,9 @@ namespace slam {
 
         virtual void linearizeOplus();
 
-        virtual bool read(std::istream &in) {}
+        virtual bool read(std::istream &in) { return false; }
 
-        virtual bool write(std::ostream &os) const {};
+        virtual bool write(std::ostream &os) const { return false; };
 
         Vector3d _point;
         Camera* _camera;

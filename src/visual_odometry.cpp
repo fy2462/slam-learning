@@ -52,7 +52,8 @@ namespace slam {
                 extractKeyPoints();
                 computeDescriptors();
                 featureMatching();
-                poseEstimationPnP();
+                //poseEstimationPnP();
+                poseEstimationICP();
                 if (checkEstimatedPose()) {
                     _current->T_c_w = _T_c_r_estimated;
                     optimizeMap();
@@ -118,20 +119,32 @@ namespace slam {
                                                });
         float min_dis = min_match_iter->distance;
 
-        // _feature_matches.clear();
-        _last_frame_3dpts = _match_3dpts;
         _match_3dpts.clear();
         _match_2dkp_index.clear();
+        _last_frame_3dpts.clear();
         for (cv::DMatch &m: matches) {
             if (m.distance < max<float>(min_dis * _match_ratio, 30.0)) {
-                //_feature_matches.push_back(m);
-                _match_3dpts.push_back(candidate[m.queryIdx]);
+                _last_frame_3dpts.push_back(candidate[m.queryIdx]);
+                _match_3dpts.push_back(keyPoint2MapPoint(_keypoints_curr[m.trainIdx], m.trainIdx));
                 _match_2dkp_index.push_back(m.trainIdx);
             }
         }
 
         cout << "good matches: " << _match_3dpts.size() << endl;
         cout << "match cost time: " << timer.elapsed() << endl;
+    }
+
+    MapPoint::Ptr VisualOdometry::keyPoint2MapPoint(cv::KeyPoint& key_point, int index) {
+
+        double d = _ref->findDepth(key_point);
+        Vector3d p_world = _ref->_camera->pixel2world(Vector2d(key_point.pt.x, key_point.pt.y),
+                                                      _current->T_c_w, d);
+        Vector3d n = p_world - _ref->getCamCerter();
+        n.normalize();
+        MapPoint::Ptr map_point = MapPoint::createMapPoint(
+                p_world, n, _descriptors_curr.row(index).clone(), _current.get()
+        );
+        return map_point;
     }
 
     void VisualOdometry::setRef3DPoints() {
@@ -149,38 +162,93 @@ namespace slam {
     }
 
     void VisualOdometry::poseEstimationPnP() {
+
+        // construct the 3d 2d observations
         vector<cv::Point3f> pts3d;
-        vector<cv::Point3f> pts3d_last;
         vector<cv::Point2f> pts2d;
 
-       /*for (cv::DMatch m:_feature_matches) {
-            pts3d.push_back(_pts_3d_ref[m.queryIdx]);
-            pts2d.push_back(_keypoints_curr[m.trainIdx].pt);
-        }*/
-
-        for (int index: _match_2dkp_index) {
-            pts2d.push_back(_keypoints_curr[index].pt);
+        for ( int index:_match_2dkp_index )
+        {
+            pts2d.push_back ( _keypoints_curr[index].pt );
         }
-        for (MapPoint::Ptr pt:_last_frame_3dpts) {
-            pts3d_last.push_back(pt->getPositionCV());
+        for ( MapPoint::Ptr pt:_match_3dpts )
+        {
+            pts3d.push_back( pt->getPositionCV() );
         }
-        for (MapPoint::Ptr pt:_match_3dpts) {
-            pts3d.push_back(pt->getPositionCV());
-        }
-
 
         Mat K = (cv::Mat_<double>(3, 3) << _ref->_camera->_fx, 0, _ref->_camera->_cx,
                 0, _ref->_camera->_fy, _ref->_camera->_cy,
                 0, 0, 1
         );
         Mat rvec, tvec, inliers;
-        cv::solvePnPRansac(pts3d, pts2d, K, Mat(), rvec, tvec, false, 100, 4.0, 0.99, inliers);
+        cv::solvePnPRansac ( pts3d, pts2d, K, Mat(), rvec, tvec, false, 100, 4.0, 0.99, inliers );
         _num_inliers = inliers.rows;
-        cout << "pnp inliers: " << _num_inliers << endl;
-        _T_c_r_estimated = SE3(
-                SO3(rvec.at<double>(0, 0), rvec.at<double>(1, 0), rvec.at<double>(2, 0)),
-                Vector3d(tvec.at<double>(0, 0), tvec.at<double>(1, 0), tvec.at<double>(2, 0))
+        cout<<"pnp inliers: "<<_num_inliers<<endl;
+        _T_c_r_estimated = SE3 (
+                SO3 ( rvec.at<double> ( 0,0 ), rvec.at<double> ( 1,0 ), rvec.at<double> ( 2,0 ) ),
+                Vector3d ( tvec.at<double> ( 0,0 ), tvec.at<double> ( 1,0 ), tvec.at<double> ( 2,0 ) )
         );
+
+        // using bundle adjustment to optimize the pose
+        typedef g2o::BlockSolver<g2o::BlockSolverTraits<6,2>> Block;
+        Block::LinearSolverType* linearSolver = new g2o::LinearSolverDense<Block::PoseMatrixType>();
+        Block* solver_ptr = new Block ( linearSolver );
+        g2o::OptimizationAlgorithmLevenberg* solver = new g2o::OptimizationAlgorithmLevenberg ( solver_ptr );
+        g2o::SparseOptimizer optimizer;
+        optimizer.setAlgorithm ( solver );
+
+        g2o::VertexSE3Expmap* pose = new g2o::VertexSE3Expmap();
+        pose->setId ( 0 );
+        pose->setEstimate ( g2o::SE3Quat (
+                _T_c_r_estimated.rotation_matrix(), _T_c_r_estimated.translation()
+        ));
+        optimizer.addVertex ( pose );
+
+        // edges
+        for ( int i=0; i<inliers.rows; i++ )
+        {
+            int index = inliers.at<int> ( i,0 );
+            // 3D -> 2D projection
+            EdgeProjectXYZ2UVPoseOnly* edge = new EdgeProjectXYZ2UVPoseOnly();
+            edge->setId ( i );
+            edge->setVertex ( 0, pose );
+            edge->_camera = _current->_camera.get();
+            edge->_point = Vector3d ( pts3d[index].x, pts3d[index].y, pts3d[index].z );
+            edge->setMeasurement ( Vector2d ( pts2d[index].x, pts2d[index].y ) );
+            edge->setInformation ( Eigen::Matrix2d::Identity() );
+            optimizer.addEdge ( edge );
+            // set the inlier map points
+            _match_3dpts[index]->_matched_times++;
+        }
+
+        optimizer.initializeOptimization();
+        optimizer.optimize ( 10 );
+
+        _T_c_r_estimated = SE3 (
+                pose->estimate().rotation(),
+                pose->estimate().translation()
+        );
+
+        cout<<"T_c_w_estimated_: "<<endl<<_T_c_r_estimated.matrix()<<endl;
+
+    }
+
+    void VisualOdometry::poseEstimationICP() {
+        vector<Eigen::Vector3d> pts3d;
+        vector<Eigen::Vector3d> pts3d_last;
+        vector<cv::Point2f> pts2d;
+
+        for (int index: _match_2dkp_index) {
+            pts2d.push_back(_keypoints_curr[index].pt);
+        }
+        for (MapPoint::Ptr pt:_last_frame_3dpts) {
+            Eigen::Vector3d cam3d = _ref->_camera->world2camera(pt->_pos, _T_c_r_estimated);
+            pts3d_last.push_back(cam3d);
+        }
+        for (MapPoint::Ptr pt:_match_3dpts) {
+            Eigen::Vector3d cam3d = _ref->_camera->world2camera(pt->_pos, _current->T_c_w);
+            pts3d.push_back(cam3d);
+        }
 
         // add the g2o bundle adjustment to optimize the pose
         typedef g2o::BlockSolver<g2o::BlockSolverTraits<6, 3>> Bolck;
@@ -198,34 +266,28 @@ namespace slam {
                 Eigen::Matrix3d::Identity(),
                 Eigen::Vector3d(0, 0, 0)
         ));
-        /*pose3d->setEstimate(g2o::SE3Quat(
-                _T_c_r_estimated.rotation_matrix(),
-                _T_c_r_estimated.translation()
-        ));*/
+
         optimizer.addVertex(pose3d);
 
         // one Vertex Edges;
-        for (int i = 0; i < _num_inliers; i++) {
-            int index = inliers.at<int>(i, 0);
-            EdgeProjectXYZRGBDPoseOnly *edge = new EdgeProjectXYZRGBDPoseOnly(Eigen::Vector3d(pts2[i].x, pts2[i].y, pts2[i].z));
+        for (int i = 0; i < pts3d.size(); i++) {
+            EdgeProjectXYZRGBDPoseOnly *edge = new EdgeProjectXYZRGBDPoseOnly(pts3d[i]);
             edge->setId(i);
             edge->setVertex(0, pose3d);
-            //edge->_camera = _current->_camera.get();
-            edge->_point = Vector3d(pts3d[index].x, pts3d[index].y, pts3d[index].z);
-            edge->setMeasurement(Vector2d(pts2d[index].x, pts2d[index].y));
-            edge->setInformation(Eigen::Matrix2d::Identity());
+            edge->_point = pts3d_last[i];
+            edge->setMeasurement(pts3d_last[i]);
+            edge->setInformation(Eigen::Matrix3d::Identity() * 1e4);
             optimizer.addEdge(edge);
-            _match_3dpts[index]->_matched_times++;
         }
 
+        optimizer.setVerbose(true);
         optimizer.initializeOptimization();
         optimizer.optimize(10);
 
         _T_c_r_estimated = SE3(pose3d->estimate().rotation(),
                                pose3d->estimate().translation());
 
-        cout << "T_c_w_estimated_: " << endl << _T_c_r_estimated.matrix() << endl;
-
+        cout << "T_c_w_estimated_: " << endl << Eigen::Isometry3d(pose3d->estimate()).matrix() << endl;
     }
 
     bool VisualOdometry::checkEstimatedPose() {

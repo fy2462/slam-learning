@@ -2,7 +2,8 @@ cmake_minimum_required(VERSION 3.4)
 project(slam-learning)
 
 set(CMAKE_CXX_COMPILER "g++")
-set(CMAKE_BUILD_TYPE "Debug")
+set(CMAKE_BUILD_TYPE Debug CACHE STRING "set build type to debug")
+SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g -ggdb ")
 set(CMAKE_CXX_FLAGS "-std=c++11 -march=native -O3")
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake_modules)

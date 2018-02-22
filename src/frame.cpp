@@ -53,6 +53,6 @@ namespace slam {
         Vector2d pixel = _camera->world2pixel(pt_world, T_c_w);
         int u = pixel(0, 0);
         int v = pixel(1, 0);
-        return pixel(0, 0) > 0 && pixel(1, 0) > 0 && pixel(0, 0) < _color_img.cols && pixel(1, 0) < _color_img.rows;
+        return u > 0 && v > 0 && u < _color_img.cols && v < _color_img.rows;
     }
 }
