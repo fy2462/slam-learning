@@ -27,6 +27,7 @@ namespace slam {
         _level_pyramid = Config::get<int>("level_pyramid");
         _match_ratio = Config::get<float>("match_ratio");
         _max_num_lost = Config::get<float>("max_num_lost");
+        _ba_type = Config::get<string>("ba_type");
         _min_inliers = Config::get<int>("min_inliers");
         key_frame_min_rot = Config::get<double>("keyframe_rotation");
         key_frame_min_trans = Config::get<double>("keyframe_translation");
@@ -52,8 +53,11 @@ namespace slam {
                 extractKeyPoints();
                 computeDescriptors();
                 featureMatching();
-                poseEstimationPnP();
-                //poseEstimationICP();
+                if (_ba_type == "pnp") {
+                    poseEstimationPnP();
+                } else if (_ba_type == "icp") {
+                    poseEstimationICP();
+                }
                 if (checkEstimatedPose()) {
                     _current->T_c_w = _T_c_r_estimated;
                     optimizeMap();
@@ -250,6 +254,7 @@ namespace slam {
             pts3d.push_back(cam3d);
         }
 
+        _num_inliers = _match_3dpts.size();
         // add the g2o bundle adjustment to optimize the pose
         typedef g2o::BlockSolver<g2o::BlockSolverTraits<6, 3>> Bolck;
         // 6 * 2 linearSolver

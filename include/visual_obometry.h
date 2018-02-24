@@ -45,6 +45,7 @@ namespace slam {
         float _match_ratio;
         int _max_num_lost;
         int _min_inliers;
+        string _ba_type;
 
         double key_frame_min_rot;
         double key_frame_min_trans;
