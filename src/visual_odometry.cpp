@@ -52,8 +52,8 @@ namespace slam {
                 extractKeyPoints();
                 computeDescriptors();
                 featureMatching();
-                //poseEstimationPnP();
-                poseEstimationICP();
+                poseEstimationPnP();
+                //poseEstimationICP();
                 if (checkEstimatedPose()) {
                     _current->T_c_w = _T_c_r_estimated;
                     optimizeMap();
@@ -124,8 +124,8 @@ namespace slam {
         _last_frame_3dpts.clear();
         for (cv::DMatch &m: matches) {
             if (m.distance < max<float>(min_dis * _match_ratio, 30.0)) {
-                _last_frame_3dpts.push_back(candidate[m.queryIdx]);
-                _match_3dpts.push_back(keyPoint2MapPoint(_keypoints_curr[m.trainIdx], m.trainIdx));
+                _last_frame_3dpts.push_back(keyPoint2MapPoint(_keypoints_curr[m.trainIdx], m.trainIdx));
+                _match_3dpts.push_back(candidate[m.queryIdx]);
                 _match_2dkp_index.push_back(m.trainIdx);
             }
         }
@@ -271,11 +271,11 @@ namespace slam {
 
         // one Vertex Edges;
         for (int i = 0; i < pts3d.size(); i++) {
-            EdgeProjectXYZRGBDPoseOnly *edge = new EdgeProjectXYZRGBDPoseOnly(pts3d[i]);
+            EdgeProjectXYZRGBDPoseOnly *edge = new EdgeProjectXYZRGBDPoseOnly(pts3d_last[i]);
             edge->setId(i);
             edge->setVertex(0, pose3d);
-            edge->_point = pts3d_last[i];
-            edge->setMeasurement(pts3d_last[i]);
+            edge->_point = pts3d[i];
+            edge->setMeasurement(pts3d[i]);
             edge->setInformation(Eigen::Matrix3d::Identity() * 1e4);
             optimizer.addEdge(edge);
         }
@@ -297,6 +297,7 @@ namespace slam {
         }
         // compute last frame move to current pose ??
         SE3 T_r_c = _ref->T_c_w * _T_c_r_estimated.inverse();
+        Sophus::Vector6d d = T_r_c.log();
         Sophus::Vector6d d = T_r_c.log();
         if (d.norm() > 5.0) {
             cout << "reject because motion is too large: " << d.norm() << endl;
