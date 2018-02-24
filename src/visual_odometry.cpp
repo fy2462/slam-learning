@@ -303,7 +303,6 @@ namespace slam {
         // compute last frame move to current pose ??
         SE3 T_r_c = _ref->T_c_w * _T_c_r_estimated.inverse();
         Sophus::Vector6d d = T_r_c.log();
-        Sophus::Vector6d d = T_r_c.log();
         if (d.norm() > 5.0) {
             cout << "reject because motion is too large: " << d.norm() << endl;
             return false;

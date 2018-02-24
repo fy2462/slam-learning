@@ -8,14 +8,19 @@
 #include "common/common.h"
 #include "camera.h"
 
+#include <Eigen/Core>
 #include <g2o/core/base_vertex.h>
 #include <g2o/core/base_unary_edge.h>
+#include "g2o/core/base_binary_edge.h"
 #include <g2o/core/block_solver.h>
 #include <g2o/core/optimization_algorithm_levenberg.h>
 #include <g2o/types/sba/types_six_dof_expmap.h>
 #include <g2o/solvers/dense/linear_solver_dense.h>
 #include <g2o/core/robust_kernel.h>
 #include <g2o/core/robust_kernel_impl.h>
+
+#include "ceres/autodiff.h"
+#include "tools/rotation.h"
 
 namespace slam {
     class EdgeProjectXYZRGBD
@@ -65,6 +70,75 @@ namespace slam {
 
         Vector3d _point;
         Camera* _camera;
+    };
+
+    class VertexCameraBAL : public g2o::BaseVertex<9,Eigen::VectorXd>
+    {
+    public:
+        EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
+        VertexCameraBAL() {}
+
+        virtual bool read ( std::istream& /*is*/ )
+        {
+            return false;
+        }
+
+        virtual bool write ( std::ostream& /*os*/ ) const
+        {
+            return false;
+        }
+
+        virtual void setToOriginImpl() {}
+
+        virtual void oplusImpl ( const double* update );
+
+    };
+
+
+    class VertexPointBAL : public g2o::BaseVertex<3, Eigen::Vector3d>
+    {
+    public:
+        EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
+        VertexPointBAL() {}
+
+        virtual bool read ( std::istream& /*is*/ )
+        {
+            return false;
+        }
+
+        virtual bool write ( std::ostream& /*os*/ ) const
+        {
+            return false;
+        }
+
+        virtual void setToOriginImpl() {}
+
+        void oplusImpl ( const double* update );
+    };
+
+    class EdgeObservationBAL : public g2o::BaseBinaryEdge<2, Eigen::Vector2d,VertexCameraBAL, VertexPointBAL>
+    {
+    public:
+        EIGEN_MAKE_ALIGNED_OPERATOR_NEW;
+        EdgeObservationBAL() {}
+
+        virtual bool read ( std::istream& /*is*/ )
+        {
+            return false;
+        }
+
+        virtual bool write ( std::ostream& /*os*/ ) const
+        {
+            return false;
+        }
+
+        virtual void computeError();
+
+        template<typename T>
+        bool operator() ( const T* camera, const T* point, T* residuals ) const;
+
+
+        virtual void linearizeOplus();
     };
 
 }

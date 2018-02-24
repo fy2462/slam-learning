@@ -3,6 +3,9 @@
 # the dataset directory
 dataset_dir: ../data
 
+# backend dataseet file path
+backend_dataset_path: ../data/problem-be-op.txt
+
 # camera intrinsics
 camera.fx: 517.3
 camera.fy: 516.5
@@ -14,7 +17,7 @@ camera.depth_scale: 5000
 
 # BA type
 # pnp/icp
-ba_type: pnp
+ba_type: icp
 
 # VO paras
 number_of_features: 500
